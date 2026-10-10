@@ -1,6 +1,4 @@
-// ============= Full file contents =============
-
-1: @import "tailwindcss" source(none);
+@import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
 
