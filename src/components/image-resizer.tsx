@@ -310,11 +310,16 @@ export function ImageResizer() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border">
+    <div className="relative min-h-screen bg-background">
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-40 left-1/4 h-[28rem] w-[28rem] rounded-full bg-primary/20 blur-[120px]" />
+        <div className="absolute top-1/3 -right-28 h-96 w-96 rounded-full bg-primary-glow/15 blur-[120px]" />
+        <div className="absolute -bottom-32 left-10 h-80 w-80 rounded-full bg-secondary/40 blur-[120px]" />
+      </div>
+      <header className="border-b border-primary/15">
         <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 py-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <ImageIcon className="h-5 w-5" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-glow shadow-lg shadow-primary/30">
+            <ImageIcon className="h-5 w-5 text-primary-foreground" />
           </div>
           <h1 className="text-xl font-semibold tracking-tight text-foreground">
             Image Resizer
@@ -325,6 +330,15 @@ export function ImageResizer() {
       <main className="mx-auto max-w-5xl px-4 py-8">
         {!source ? (
           <div className="mx-auto max-w-xl">
+            <div className="pb-8 pt-6 text-center">
+              <h2 className="bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl">
+                Resize images, beautifully
+              </h2>
+              <p className="mt-3 text-muted-foreground">
+                Set exact dimensions or a target file size — everything is
+                processed right in your browser.
+              </p>
+            </div>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
@@ -334,14 +348,14 @@ export function ImageResizer() {
               }}
               onDragLeave={() => setDragging(false)}
               onDrop={onDrop}
-              className={`flex w-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed px-6 py-20 text-center transition-colors ${
+              className={`group flex w-full flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed px-6 py-16 text-center backdrop-blur transition-all ${
                 dragging
-                  ? "border-primary bg-accent"
-                  : "border-border bg-card hover:border-primary/60 hover:bg-accent/50"
+                  ? "border-primary-glow bg-primary/15 shadow-lg shadow-primary/20"
+                  : "border-primary/30 bg-card/50 hover:border-primary-glow/70 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/10"
               }`}
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent">
-                <UploadCloud className="h-8 w-8 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-glow shadow-lg shadow-primary/40 transition-transform group-hover:scale-110">
+                <UploadCloud className="h-8 w-8 text-primary-foreground" />
               </div>
               <div>
                 <p className="text-lg font-medium text-foreground">
@@ -362,7 +376,7 @@ export function ImageResizer() {
           <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
             {/* Preview column */}
             <div>
-              <div className="flex items-center justify-center rounded-2xl border border-border bg-muted/40 p-4">
+              <div className="flex items-center justify-center rounded-2xl border border-primary/20 bg-card/60 p-4 shadow-lg shadow-primary/5 backdrop-blur">
                 <img
                   src={resultUrl ?? source.url}
                   alt="Image preview"
@@ -370,25 +384,25 @@ export function ImageResizer() {
                 />
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-xl border border-border bg-card p-3">
+                <div className="rounded-xl border border-primary/15 bg-card/70 p-3 backdrop-blur">
                   <p className="text-muted-foreground">Original</p>
                   <p className="mt-1 font-medium text-foreground">
                     {source.width} × {source.height} px
                   </p>
                   <p className="text-muted-foreground">{formatBytes(source.sizeBytes)}</p>
                 </div>
-                <div className="rounded-xl border border-primary/30 bg-accent p-3">
+                <div className="rounded-xl border border-primary-glow/40 bg-gradient-to-br from-primary/15 to-primary-glow/10 p-3 backdrop-blur">
                   <p className="text-muted-foreground">Resized</p>
                   <p className="mt-1 font-medium text-foreground">
                     {resultDims ? `${resultDims.w} × ${resultDims.h} px` : "—"}
                   </p>
-                  <p className="text-primary font-medium">
+                  <p className="font-medium text-primary-glow">
                     {resultSize !== null ? formatBytes(resultSize) : "—"}
                   </p>
                 </div>
               </div>
               {notice && (
-                <p className="mt-4 flex items-start gap-2 rounded-xl border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+                <p className="mt-4 flex items-start gap-2 rounded-xl border border-primary/15 bg-card/60 p-3 text-sm text-muted-foreground backdrop-blur">
                   <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   {notice}
                 </p>
@@ -396,7 +410,7 @@ export function ImageResizer() {
             </div>
 
             {/* Controls column */}
-            <div className="space-y-5 rounded-2xl border border-border bg-card p-5">
+            <div className="space-y-5 rounded-2xl border border-primary/20 bg-card/70 p-5 shadow-lg shadow-primary/10 backdrop-blur">
               <div>
                 <div className="mb-2 flex items-center justify-between">
                   <Label>Dimensions (px)</Label>
@@ -497,7 +511,11 @@ export function ImageResizer() {
               </div>
 
               <div className="flex flex-col gap-2 pt-2">
-                <Button onClick={download} disabled={!resultUrl} className="w-full">
+                <Button
+                  onClick={download}
+                  disabled={!resultUrl}
+                  className="w-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:from-primary/90 hover:to-primary-glow/90 disabled:from-primary/40 disabled:to-primary-glow/40 disabled:shadow-none"
+                >
                   <Download className="mr-2 h-4 w-4" /> Download Image
                 </Button>
                 <div className="flex gap-2">
