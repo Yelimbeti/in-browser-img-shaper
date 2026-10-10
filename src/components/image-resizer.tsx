@@ -470,7 +470,7 @@ export function ImageResizer() {
                   max={100}
                   step={1}
                   disabled={format === "image/png" || targetKb !== ""}
-                  onValueChange={([v]) => setQuality(v)}
+                  onValueChange={(v) => setQuality(v[0] ?? quality)}
                 />
                 {format === "image/png" && (
                   <p className="mt-1 text-xs text-muted-foreground">
